@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "hack.linfinity.services"
-        minSdk 26
-        targetSdk 32
+        minSdk 28
+        targetSdk 28
         versionCode 1
         versionName "1.0"
 
@@ -25,6 +25,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '33.0.0'
+    ndkVersion '24.0.8215888'
 }
 
 dependencies {
