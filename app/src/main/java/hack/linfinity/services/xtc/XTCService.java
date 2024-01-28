@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -28,7 +30,7 @@ import java.lang.reflect.Field;
 import hack.linfinity.services.xtc.restarter.XTCJobService;
 import hack.linfinity.services.xtc.restarter.XTCRestartServiceBroadcastReceiver;
 
-public class XTCService extends Service {
+public class XTCService extends NotificationListenerService {
     String dataDir;
     String homeDir;
     String xtcBinary;
@@ -138,6 +140,7 @@ public class XTCService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        XTCFrontendServer.run();
         xtcThrd = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -153,8 +156,10 @@ public class XTCService extends Service {
         xtcThrd.start();
     }
 
-    public void stop() {
+    public void stopServer() {
         try {
+            Log.d(TAG, "Stopping frontend server");
+            XTCFrontendServer.stop();
             Log.d(TAG, "Destroying");
             ps.destroy();
             Log.d(TAG, "Destroying forcibly");
@@ -194,7 +199,7 @@ public class XTCService extends Service {
         if(!speed.getBoolean("enabled", false)) return;
         Intent broadcastIntent = new Intent(XTCJobService.RESTART_INTENT);
         sendBroadcast(broadcastIntent);
-        stop();
+        stopServer();
     }
 
     @Override
@@ -206,7 +211,6 @@ public class XTCService extends Service {
         Intent broadcastIntent = new Intent(XTCJobService.RESTART_INTENT);
         sendBroadcast(broadcastIntent);
     }
-
 
     @Nullable
     @Override

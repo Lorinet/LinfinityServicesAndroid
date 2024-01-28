@@ -30,7 +30,7 @@ public class XTCTileService extends TileService {
             speed.putBoolean("enabled", false);
             speed.commit();
             try {
-                XTCService.thisService.stop();
+                XTCService.thisService.stopServer();
                 XTCService.thisService.stopSelf();
             } catch (Exception e) {
                 e.printStackTrace();
